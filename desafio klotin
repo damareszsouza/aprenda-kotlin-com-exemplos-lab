@@ -1,0 +1,36 @@
+enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
+
+class Usuario
+
+data class ConteudoEducacional(var nome: String, val duracao: Int = 60, val nivel: Nivel = Nivel.BASICO)
+
+data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+
+    val inscritos = mutableListOf<Usuario>()
+    
+    fun matricular(usuario: Usuario) {
+        inscritos.add(usuario)
+    }
+    
+    fun ordenarConteudosPorNivel() {
+        conteudos = conteudos.sortedBy { it.nivel }
+    }
+}
+
+fun main() {
+    val conteudo1 = ConteudoEducacional("Introdução ao Kotlin", 60, Nivel.BASICO)
+    val conteudo2 = ConteudoEducacional("Programação Orientada a Objetos", 60, Nivel.INTERMEDIARIO)
+    val conteudo3 = ConteudoEducacional("Testes Unitários", 60, Nivel.DIFICIL)
+    val formacao = Formacao("Desenvolvimento Kotlin", listOf(conteudo1, conteudo2, conteudo3))
+    formacao.ordenarConteudosPorNivel()
+}
+
+Nessa implementação, é definido o enum Nivel que representa os diferentes níveis de dificuldade dos conteúdos educacionais.
+
+A classe ConteudoEducacional é definida com as propriedades nome, duracao e nivel, sendo que a propriedade nivel é definida com o valor padrão Nivel.BASICO.
+
+A classe Formacao é definida com as propriedades nome e conteudos, além da lista mutável inscritos que armazena os usuários matriculados na formação. A classe também possui o método matricular(usuario: Usuario) que permite a matrícula de um usuário na formação e o método ordenarConteudosPorNivel() que ordena os conteúdos educacionais da formação por nível de dificuldade.
+
+No método main(), são criados três objetos ConteudoEducacional representando diferentes conteúdos da formação "Desenvolvimento Kotlin". Em seguida, é criado o objeto Formacao com os conteúdos educacionais e os conteúdos são ordenados por nível de dificuldade utilizando o método ordenarConteudosPorNivel.
+
+Com essa evolução, podemos representar de forma mais clara e organizada as formações educacionais oferecidas pela DIO, permitindo uma melhor manipulação e gerenciamento desses dados em uma aplicação
