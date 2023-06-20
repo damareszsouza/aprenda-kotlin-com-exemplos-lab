@@ -1,0 +1,96 @@
+DESCRIÇÃO
+Use o conhecimento adquirido nesse módulo para construir um projeto utilizando o conceito de internacionalização (i18n), ou seja, um App que terá suporte a diversas línguas, como inglês, português e espanhol. Nesse projeto, você poderá desenvolver sua capacidade abstrair um problema, analisar e aplicar implementações que forem necessárias para a conclusão deste desafio.
+1. `res/values/strings.xml`:
+
+```xml
+<resources>
+    <string name="titulo_app">Meu Aplicativo</string>
+    <string name="mensagem_boas_vindas">Bem-vindo ao meu aplicativo!</string>
+    <string name="idiomas">Idiomas</string>
+    <string-array name="opcoes_idiomas">
+        <item>Português</item>
+        <item>Inglês</item>
+    </string-array>
+</resources>
+```
+
+2. `res/values-en/strings.xml`:
+
+```xml
+<resources>
+    <string name="titulo_app">My App</string>
+    <string name="mensagem_boas_vindas">Welcome to my app!</string>
+</resources>
+```
+
+3. `res/menu/menu_settings.xml`:
+
+```xml
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/idiomas"
+        android:id="@+id/item_idiomas"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_language"/>
+</menu>
+```
+
+4. `MainActivity.kt`:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val titulo = resources.getString(R.string.titulo_app)
+        val mensagem = resources.getString(R.string.mensagem_boas_vindas)
+
+        findViewById<TextView>(R.id.texto_boas_vindas).text = mensagem
+        setTitle(titulo)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_settings, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.item_idiomas) {
+            selecionarIdioma()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun selecionarIdioma() {
+        val opcoes = resources.getStringArray(R.array.opcoes_idiomas)
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(R.string.idiomas)
+            .setItems(opcoes) { _, which ->
+                val codigo = when (which) {
+                    0 -> "pt"
+                    1 -> "en"
+                    else -> "pt"
+                }
+                atualizarIdioma(codigo)
+                recreate()
+            }
+            .create()
+        dialog.show()
+    }
+
+    private fun atualizarIdioma(codigo: String) {
+        val configuracao = resources.configuration
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuracao.setLocale(Locale(codigo))
+        } else {
+            configuracao.locale = Locale(codigo)
+        }
+        resources.updateConfiguration(configuracao, resources.displayMetrics)
+    }
+}
+```
+
+Nessa implementação, o arquivo `strings.xml` define as strings utilizadas pelo aplicativo em português e o arquivo `strings.xml` em `values-en` define as mesmas strings em inglês. O arquivo `menu_settings.xml` define o menu de configurações, com um item para selecionar o idioma do aplicativo. A classe `MainActivity` define a atividade do aplicativo, com um `TextView` que exibe a mensagem de boas-vindas e um menu de configurações que permite ao usuário escolher o idioma do aplicativo. A classe também define os métodos `onCreateOptionsMenu()`, `onOptionsItemSelected()`, `selecionarIdioma()` e `atualizarIdioma()` para implementar o comportamento do menu de configurações e atualizar o idioma do aplicativo em tempo de execução.
